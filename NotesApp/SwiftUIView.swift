@@ -1,18 +1,34 @@
 //
 //  SwiftUIView.swift
 //  NotesApp
-//
-//  Created by Apple Orchard on 28/12/2025.
-//
+
 
 import SwiftUI
 
-struct SwiftUIView: View {
+
+struct AddNoteView: View {
+    @ObservedObject var vm: NotesViewModel
+    @Environment(\.dismiss) var dismiss
+
+    @State private var title = ""
+    @State private var content = ""
+
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        NavigationStack {
+            Form {
+                TextField("Title", text: $title)
+                TextEditor(text: $content)
+            }
+            .navigationTitle("New Note")
+            .toolbar {
+                Button("Save") {
+                    vm.addNote(title: title, content: content)
+                    dismiss()
+                }
+            }
+        }
     }
 }
-
 #Preview {
-    SwiftUIView()
+    AddNoteView(vm: NotesViewModel())
 }
